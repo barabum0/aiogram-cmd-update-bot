@@ -2,7 +2,8 @@ import os
 import subprocess
 
 from aiogram import Dispatcher, Bot, F
-from aiogram.types import Message
+from aiogram.exceptions import TelegramBadRequest
+from aiogram.types import Message, BufferedInputFile
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -19,7 +20,12 @@ async def update_frontend(message: Message):
 
     m = await message.reply("Команда выполняется...")
     result = os.popen(os.getenv("UPDATE_FRONTEND_CMD")).read()
-    await m.edit_text(f"Команда выполнена: <code>{result}</code>")
+    try:
+        await m.edit_text(f"Команда выполнена: <code>{result}</code>")
+    except TelegramBadRequest:
+        await m.delete()
+        await message.reply_document(document=BufferedInputFile(result.encode("utf-8"), filename="output.py"),
+                                     caption="Команда выполнена")
 
 
 @dp.message(F.text.startswith("/update_dev_backend"))
@@ -29,7 +35,11 @@ async def update_backend(message: Message):
 
     m = await message.reply("Команда выполняется...")
     result = os.popen(os.getenv("UPDATE_BACKEND_CMD")).read()
-    await m.edit_text(f"Команда выполнена: <code>{result}</code>")
+    try:
+        await m.edit_text(f"Команда выполнена: <code>{result}</code>")
+    except TelegramBadRequest:
+        await m.delete()
+        await message.reply_document(document=BufferedInputFile(result.encode("utf-8"), filename="output.py"), caption="Команда выполнена")
 
 
 dp.run_polling(bot)
