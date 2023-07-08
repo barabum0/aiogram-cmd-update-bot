@@ -24,7 +24,7 @@ async def update_frontend(message: Message):
         await m.edit_text(f"Команда выполнена: <code>{result}</code>")
     except TelegramBadRequest:
         await m.delete()
-        await message.reply_document(document=BufferedInputFile(result.encode("utf-8"), filename="output.py"),
+        await message.reply_document(document=BufferedInputFile(result.encode("utf-8"), filename="output.txt"),
                                      caption="Команда выполнена")
 
 
@@ -39,7 +39,7 @@ async def update_backend(message: Message):
         await m.edit_text(f"Команда выполнена: <code>{result}</code>")
     except TelegramBadRequest:
         await m.delete()
-        await message.reply_document(document=BufferedInputFile(result.encode("utf-8"), filename="output.py"), caption="Команда выполнена")
+        await message.reply_document(document=BufferedInputFile(result.encode("utf-8"), filename="output.txt"), caption="Команда выполнена")
 
 
 dp.run_polling(bot)
