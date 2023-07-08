@@ -1,16 +1,35 @@
-# This is a sample Python script.
+import os
+import subprocess
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from aiogram import Dispatcher, Bot, F
+from aiogram.types import Message
+from dotenv import load_dotenv
+
+load_dotenv()
+
+dp = Dispatcher()
+bot = Bot(token=os.getenv("TELEGRAM_BOT_TOKEN"), parse_mode="HTML")
+chat_id = int(os.getenv("TELEGRAM_CHAT_ID"))
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+@dp.message(F.text.startswith("/update_dev_frontend"))
+async def update_frontend(message: Message):
+    if message.chat.id != chat_id:
+        return
+
+    m = await message.reply("Команда выполняется...")
+    result = os.popen(os.getenv("UPDATE_FRONTEND_CMD")).read()
+    await m.edit_text(f"Команда выполнена: <code>{result}</code>")
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+@dp.message(F.text.startswith("/update_dev_backend"))
+async def update_backend(message: Message):
+    if message.chat.id != chat_id:
+        return
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    m = await message.reply("Команда выполняется...")
+    result = os.popen(os.getenv("UPDATE_BACKEND_CMD")).read()
+    await m.edit_text(f"Команда выполнена: <code>{result}</code>")
+
+
+dp.run_polling(bot)
