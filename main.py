@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 dp = Dispatcher()
-bot = Bot(token=os.getenv("TELEGRAM_BOT_TOKEN"), parse_mode="HTML")
+bot = Bot(token=os.getenv("TELEGRAM_BOT_TOKEN"), parse_mode="Markdown")
 chat_id = int(os.getenv("TELEGRAM_CHAT_ID"))
 
 
@@ -21,7 +21,7 @@ async def update_frontend(message: Message):
     m = await message.reply("Команда выполняется...")
     result = os.popen(os.getenv("UPDATE_FRONTEND_CMD")).read()
     try:
-        await m.edit_text(f"Команда выполнена: <code>{result}</code>")
+        await m.edit_text(f"Команда выполнена: \n```shell\n{result}\n```")
     except TelegramBadRequest:
         await m.delete()
         await message.reply_document(document=BufferedInputFile(result.encode("utf-8"), filename="output.txt"),
@@ -36,7 +36,7 @@ async def update_backend(message: Message):
     m = await message.reply("Команда выполняется...")
     result = os.popen(os.getenv("UPDATE_BACKEND_CMD")).read()
     try:
-        await m.edit_text(f"Команда выполнена: <code>{result}</code>")
+        await m.edit_text(f"Команда выполнена: \n```shell\n{result}\n```")
     except TelegramBadRequest:
         await m.delete()
         await message.reply_document(document=BufferedInputFile(result.encode("utf-8"), filename="output.txt"), caption="Команда выполнена")
