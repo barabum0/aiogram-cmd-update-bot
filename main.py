@@ -18,7 +18,10 @@ async def update_frontend(message: Message):
     if message.chat.id != chat_id:
         return
 
-    m = await message.reply("Команда выполняется...")
+    m = await message.reply("Команда выполняется...\n"
+                            f"```shell\n"
+                            f"$ {os.getenv('UPDATE_FRONTEND_CMD')}\n"
+                            f"```")
     result = os.popen(os.getenv("UPDATE_FRONTEND_CMD")).read()
     try:
         await m.edit_text(f"Команда выполнена:\n"
@@ -37,7 +40,10 @@ async def update_backend(message: Message):
     if message.chat.id != chat_id:
         return
 
-    m = await message.reply("Команда выполняется...")
+    m = await message.reply("Команда выполняется...\n"
+                            f"```shell\n"
+                            f"$ {os.getenv('UPDATE_BACKEND_CMD')}\n"
+                            f"```")
     result = os.popen(os.getenv("UPDATE_BACKEND_CMD")).read()
     try:
         await m.edit_text(f"Команда выполнена:\n"
