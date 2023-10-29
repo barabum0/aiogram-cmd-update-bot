@@ -23,6 +23,7 @@ async def update_frontend(message: Message):
     try:
         await m.edit_text(f"Команда выполнена:\n"
                           f"```shell\n"
+                          f"$ {os.getenv('UPDATE_FRONTEND_CMD')}\n"
                           f"{result.strip()}\n"
                           f"```")
     except TelegramBadRequest:
@@ -41,6 +42,7 @@ async def update_backend(message: Message):
     try:
         await m.edit_text(f"Команда выполнена:\n"
                           f"```shell\n"
+                          f"$ {os.getenv('UPDATE_BACKEND_CMD')}\n"
                           f"{result.strip()}\n"
                           f"```")
     except TelegramBadRequest:
