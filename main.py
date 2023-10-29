@@ -21,7 +21,10 @@ async def update_frontend(message: Message):
     m = await message.reply("Команда выполняется...")
     result = os.popen(os.getenv("UPDATE_FRONTEND_CMD")).read()
     try:
-        await m.edit_text(f"Команда выполнена: \n```shell\n{result}\n```")
+        await m.edit_text(f"Команда выполнена:\n"
+                          f"```shell\n"
+                          f"{result.strip()}\n"
+                          f"```")
     except TelegramBadRequest:
         await m.delete()
         await message.reply_document(document=BufferedInputFile(result.encode("utf-8"), filename="output.txt"),
@@ -36,7 +39,10 @@ async def update_backend(message: Message):
     m = await message.reply("Команда выполняется...")
     result = os.popen(os.getenv("UPDATE_BACKEND_CMD")).read()
     try:
-        await m.edit_text(f"Команда выполнена: \n```shell\n{result}\n```")
+        await m.edit_text(f"Команда выполнена:\n"
+                          f"```shell\n"
+                          f"{result.strip()}\n"
+                          f"```")
     except TelegramBadRequest:
         await m.delete()
         await message.reply_document(document=BufferedInputFile(result.encode("utf-8"), filename="output.txt"), caption="Команда выполнена")
